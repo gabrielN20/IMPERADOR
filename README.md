@@ -27,7 +27,7 @@ Logo.BackgroundTransparency = 1
 Logo.Text = "🥶!MPERADO4🥶"
 Logo.Font = Enum.Font.GothamBlack
 Logo.TextSize = 42
-Logo.TextColor3 = Color3.fromRGB(0, 140, 255) -- >> AZUL
+Logo.TextColor3 = Color3.fromRGB(0, 140, 255)
 Logo.TextTransparency = 1
 
 local Sub = Instance.new("TextLabel", LoadMain)
@@ -60,7 +60,7 @@ BarBg.BackgroundColor3 = Color3.fromRGB(30,30,30)
 
 local Bar = Instance.new("Frame", BarBg)
 Bar.Size = UDim2.new(0,0,1,0)
-Bar.BackgroundColor3 = Color3.fromRGB(0, 140, 255) -- >> AZUL
+Bar.BackgroundColor3 = Color3.fromRGB(0, 140, 255)
 
 Instance.new("UICorner", BarBg).CornerRadius = UDim.new(1,0)
 Instance.new("UICorner", Bar).CornerRadius = UDim.new(1,0)
@@ -119,11 +119,10 @@ ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local CrownIconID = "rbxassetid://14567278958" 
 
--- // PALETA DE CORES: AZUL // --
 local Colors = {
     Bg = Color3.fromRGB(8, 8, 8),
     DarkBg = Color3.fromRGB(15, 15, 15),
-    Accent = Color3.fromRGB(0, 140, 255), -- AZUL VIBRANTE
+    Accent = Color3.fromRGB(0, 140, 255),
     White = Color3.fromRGB(255, 255, 255),
     Text = Color3.fromRGB(240, 240, 240),
     Gray = Color3.fromRGB(80, 80, 80)
@@ -168,7 +167,6 @@ local function Notify(title, msg)
     end)
 end
 
--- // BOTÃO FLUTUANTE (Ícone Coroa Branca com Efeito Azul) // --
 local MiniButton = Instance.new("TextButton")
 MiniButton.Name = "MiniButton"
 MiniButton.Size = UDim2.new(0, 60, 0, 60)
@@ -179,28 +177,26 @@ MiniButton.Parent = ScreenGui
 CreateCorner(MiniButton, 30)
 MakeDraggable(MiniButton, MiniButton)
 
--- Borda que pulsa em Azul
 local MiniStroke = Instance.new("UIStroke", MiniButton)
-MiniStroke.Color = Colors.Accent -- Azul
+MiniStroke.Color = Colors.Accent
 MiniStroke.Thickness = 3
 MiniStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
 spawn(function()
     while MiniButton.Parent do
-        TweenService:Create(MiniStroke, TweenInfo.new(0.8), {Color = Colors.Accent}):Play() -- Azul Vibrante
+        TweenService:Create(MiniStroke, TweenInfo.new(0.8), {Color = Colors.Accent}):Play()
         wait(0.8)
-        TweenService:Create(MiniStroke, TweenInfo.new(0.8), {Color = Color3.fromRGB(0, 50, 100)}):Play() -- Azul Escuro (Efeito)
+        TweenService:Create(MiniStroke, TweenInfo.new(0.8), {Color = Color3.fromRGB(0, 50, 100)}):Play()
         wait(0.8)
     end
 end)
 
--- Ícone da Coroa (BRANCO)
 local MiniIcon = Instance.new("ImageLabel", MiniButton)
 MiniIcon.Size = UDim2.new(0, 35, 0, 35)
 MiniIcon.Position = UDim2.new(0.5, -17.5, 0.5, -17.5)
 MiniIcon.BackgroundTransparency = 1
 MiniIcon.Image = CrownIconID
-MiniIcon.ImageColor3 = Colors.White -- Coroa Branca
+MiniIcon.ImageColor3 = Colors.White 
 
 local Main = Instance.new("Frame")
 Main.Name = "MainFrame"
@@ -258,7 +254,7 @@ spawn(function()
     while Title.Parent do
         Title.TextColor3 = Colors.White
         wait(0.5)
-        Title.TextColor3 = Colors.Accent -- PISCA AZUL
+        Title.TextColor3 = Colors.Accent 
         wait(0.5)
     end
 end)
@@ -272,6 +268,43 @@ local PageContainer = Instance.new("Frame", Main)
 PageContainer.Size = UDim2.new(1, -190, 1, -65)
 PageContainer.Position = UDim2.new(0, 190, 0, 60)
 PageContainer.BackgroundTransparency = 1
+
+-- // CONTEÚDO DA TELA DE BOAS-VINDAS NO CENTRO DO SCRIPT // --
+local WelcomeInner = Instance.new("Frame", PageContainer)
+WelcomeInner.Size = UDim2.fromScale(1, 1)
+WelcomeInner.BackgroundTransparency = 1
+WelcomeInner.Visible = true
+
+local pfp = Instance.new("ImageLabel", WelcomeInner)
+pfp.Size = UDim2.new(0, 150, 0, 150)
+pfp.Position = UDim2.fromScale(0.5, 0.4)
+pfp.AnchorPoint = Vector2.new(0.5, 0.5)
+pfp.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+pfp.Image = "rbxthumb://type=AvatarHeadShot&id=" .. Players.LocalPlayer.UserId .. "&w=420&h=420"
+CreateCorner(pfp, 75)
+local pfpStroke = Instance.new("UIStroke", pfp)
+pfpStroke.Color = Colors.Accent
+pfpStroke.Thickness = 3
+
+local welcomeTxt = Instance.new("TextLabel", WelcomeInner)
+welcomeTxt.Size = UDim2.new(1, 0, 0, 40)
+welcomeTxt.Text = "BEM-VINDO, STAFF!"
+welcomeTxt.Font = Enum.Font.GothamBlack
+welcomeTxt.TextSize = 28
+welcomeTxt.TextColor3 = Colors.White
+welcomeTxt.Position = UDim2.fromScale(0.5, 0.62)
+welcomeTxt.AnchorPoint = Vector2.new(0.5, 0.5)
+welcomeTxt.BackgroundTransparency = 1
+
+local infoTxt = Instance.new("TextLabel", WelcomeInner)
+infoTxt.Size = UDim2.new(1, 0, 0, 20)
+infoTxt.Text = "@" .. Players.LocalPlayer.Name:upper() .. " | ID: " .. Players.LocalPlayer.UserId
+infoTxt.Font = Enum.Font.GothamMedium
+infoTxt.TextSize = 16
+infoTxt.TextColor3 = Color3.fromRGB(180, 180, 180)
+infoTxt.Position = UDim2.fromScale(0.5, 0.68)
+infoTxt.AnchorPoint = Vector2.new(0.5, 0.5)
+infoTxt.BackgroundTransparency = 1
 
 local TabsList = Instance.new("UIListLayout", Sidebar)
 TabsList.Padding = UDim.new(0, 5)
@@ -299,8 +332,9 @@ local function AddTab(name, icon)
     Instance.new("UIListLayout", Page).Padding = UDim.new(0, 8)
     
     Btn.MouseButton1Click:Connect(function()
+        WelcomeInner.Visible = false -- Esconde o Bem-Vindo quando clicar em uma aba
         for _, obj in pairs(Sidebar:GetChildren()) do if obj:IsA("TextButton") then obj.BackgroundColor3 = Colors.Bg obj.TextColor3 = Colors.Gray end end
-        for _, p in pairs(PageContainer:GetChildren()) do p.Visible = false end
+        for _, p in pairs(PageContainer:GetChildren()) do if p:IsA("ScrollingFrame") then p.Visible = false end end
         Page.Visible = true
         Btn.BackgroundColor3 = Colors.Accent
         Btn.TextColor3 = Colors.White
@@ -383,8 +417,6 @@ AddButton(AdminTab, "Simple Spy V2 (Remotes)", function() loadstring(game:HttpGe
 -- ABA JOGADOR
 local PlayTab = AddTab("Jogador", "🌊")
 AddLabel(PlayTab, "Atributos customizáveis")
-
---[[ [REMOVIDO] GOD MODE FOI RETIRADO CONFORME PEDIDO ]]
 
 AddInputRow(PlayTab, "Definir Velocidade", "Num...", function(val) 
     local num = tonumber(val)
@@ -585,7 +617,6 @@ AddLabel(TagTab, "Personalização de Rank")
 AddButton(TagTab, "ATIVAR TAG SUPREMA (Rainbow)", function()
     pcall(function()
         if LP.Character and LP.Character:FindFirstChild("Head") then
-            -- Remove tag antiga se houver
             if LP.Character.Head:FindFirstChild("ReiTag") then LP.Character.Head.ReiTag:Destroy() end
             
             local bg = Instance.new("BillboardGui", LP.Character.Head)
@@ -603,7 +634,6 @@ AddButton(TagTab, "ATIVAR TAG SUPREMA (Rainbow)", function()
             t.TextStrokeTransparency = 0
             t.TextStrokeColor3 = Color3.new(0,0,0)
             
-            -- Loop Rainbow
             task.spawn(function()
                 local h = 0
                 while bg.Parent do
