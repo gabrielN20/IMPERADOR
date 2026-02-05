@@ -1,4 +1,4 @@
---// [IMPERADOR] • LOADING SCREEN IMPERIAL (MODIFICADO: AZUL & PRETO) //--
+--// [IMPERADOR] • LOADING SCREEN IMPERIAL (MODIFICADO: 716x416 + EFEITOS NEON) //--
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
@@ -6,7 +6,7 @@ local CoreGui = game:GetService("CoreGui")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
--- 1. SISTEMA DE LOADING (Mantido o seu original) --
+-- 1. SISTEMA DE LOADING (Mantido Original) --
 local Blur = Instance.new("BlurEffect")
 Blur.Size = 0
 Blur.Parent = Lighting
@@ -85,17 +85,15 @@ TweenService:Create(Bar, TweenInfo.new(3.8, Enum.EasingStyle.Quad), {Size = UDim
 
 task.wait(4.2)
 
--- Efeito de saída do Loading
 TweenService:Create(LoadMain, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
 TweenService:Create(Logo, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
 TweenService:Create(Sub, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
 TweenService:Create(Phrase, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
--- NÃO removemos o Blur ainda, pois a senha usará ele
 
 task.wait(0.6)
 LoadGui:Destroy()
 
---// 2. SISTEMA DE SENHA (LOGIN SYSTEM) //--
+--// 2. SISTEMA DE SENHA (LOGIN SYSTEM - 716x416 + EFEITOS) //--
 
 local PassScreen = Instance.new("ScreenGui")
 PassScreen.Name = "ImperadorLogin"
@@ -103,97 +101,155 @@ PassScreen.Parent = CoreGui
 PassScreen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 PassScreen.IgnoreGuiInset = true
 
+-- Frame Principal (Tamanho solicitado: 716x416)
 local PassFrame = Instance.new("Frame", PassScreen)
-PassFrame.Size = UDim2.new(0, 320, 0, 250)
+PassFrame.Size = UDim2.new(0, 716, 0, 416) 
 PassFrame.Position = UDim2.fromScale(0.5, 0.5)
 PassFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-PassFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+PassFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 12) 
 PassFrame.BorderSizePixel = 0
+PassFrame.ClipsDescendants = false -- Importante para o brilho sair da borda se necessário
 
 local PassCorner = Instance.new("UICorner", PassFrame)
-PassCorner.CornerRadius = UDim.new(0, 12)
+PassCorner.CornerRadius = UDim.new(0, 15)
 
+-- Borda Neon Principal
 local PassStroke = Instance.new("UIStroke", PassFrame)
 PassStroke.Color = Color3.fromRGB(0, 140, 255)
-PassStroke.Thickness = 2
-PassStroke.Transparency = 0.5
+PassStroke.Thickness = 4
+PassStroke.Transparency = 0
 
+-- Efeito de Pulsação na Borda Principal (Animação)
+task.spawn(function()
+    while PassFrame.Parent do
+        TweenService:Create(PassStroke, TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Color = Color3.fromRGB(0, 80, 255)}):Play()
+        task.wait(1.5)
+        TweenService:Create(PassStroke, TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Color = Color3.fromRGB(0, 200, 255)}):Play()
+        task.wait(1.5)
+    end
+end)
+
+-- Ícone da Coroa (Maior para combinar com o frame 716x416)
+local CrownImg = Instance.new("ImageLabel", PassFrame)
+CrownImg.Size = UDim2.new(0, 120, 0, 120)
+CrownImg.Position = UDim2.new(0.5, 0, 0.20, 0)
+CrownImg.AnchorPoint = Vector2.new(0.5, 0.5)
+CrownImg.BackgroundTransparency = 1
+CrownImg.Image = "rbxassetid://14567278958"
+CrownImg.ImageColor3 = Color3.fromRGB(255, 255, 255)
+
+-- Animação leve na coroa (Flutuando)
+task.spawn(function()
+    while CrownImg.Parent do
+        TweenService:Create(CrownImg, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, 0, 0.18, 0)}):Play()
+        task.wait(2)
+        TweenService:Create(CrownImg, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, 0, 0.22, 0)}):Play()
+        task.wait(2)
+    end
+end)
+
+-- Título
 local PassTitle = Instance.new("TextLabel", PassFrame)
-PassTitle.Size = UDim2.new(1, 0, 0, 50)
+PassTitle.Size = UDim2.new(1, 0, 0, 40)
+PassTitle.Position = UDim2.new(0, 0, 0.42, 0)
 PassTitle.BackgroundTransparency = 1
-PassTitle.Text = "ACESSO RESTRITO"
-PassTitle.Font = Enum.Font.GothamBlack
-PassTitle.TextSize = 20
-PassTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+PassTitle.Text = "SENHA DO SCRIPT"
+PassTitle.Font = Enum.Font.GothamBold
+PassTitle.TextSize = 26
+PassTitle.TextColor3 = Color3.fromRGB(240, 240, 240)
 
+-- Caixa de Texto (Input) - Com animação de foco
 local PassInput = Instance.new("TextBox", PassFrame)
-PassInput.Size = UDim2.new(0.8, 0, 0, 45)
-PassInput.Position = UDim2.new(0.1, 0, 0.35, 0)
-PassInput.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+PassInput.Size = UDim2.new(0.6, 0, 0, 55) -- Mais largo
+PassInput.Position = UDim2.new(0.5, 0, 0.60, 0)
+PassInput.AnchorPoint = Vector2.new(0.5, 0.5)
+PassInput.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 PassInput.TextColor3 = Color3.fromRGB(0, 140, 255)
 PassInput.PlaceholderText = "Digite a Senha..."
-PassInput.PlaceholderColor3 = Color3.fromRGB(80, 80, 80)
+PassInput.PlaceholderColor3 = Color3.fromRGB(120, 120, 120)
 PassInput.Font = Enum.Font.GothamBold
-PassInput.TextSize = 16
+PassInput.TextSize = 20
 PassInput.Text = ""
 PassInput.ClearTextOnFocus = false
 
 local InputCorner = Instance.new("UICorner", PassInput)
-InputCorner.CornerRadius = UDim.new(0, 8)
-local InputStroke = Instance.new("UIStroke", PassInput)
-InputStroke.Color = Color3.fromRGB(60, 60, 60)
-InputStroke.Thickness = 1
+InputCorner.CornerRadius = UDim.new(0, 10)
 
+local InputStroke = Instance.new("UIStroke", PassInput)
+InputStroke.Color = Color3.fromRGB(50, 50, 70)
+InputStroke.Thickness = 2
+
+-- Animação ao clicar na caixa de senha
+PassInput.Focused:Connect(function() 
+    TweenService:Create(InputStroke, TweenInfo.new(0.3), {Color = Color3.fromRGB(0, 160, 255), Thickness = 3}):Play()
+    TweenService:Create(PassInput, TweenInfo.new(0.3), {Size = UDim2.new(0.65, 0, 0, 60), BackgroundColor3 = Color3.fromRGB(25, 25, 35)}):Play()
+end)
+
+PassInput.FocusLost:Connect(function() 
+    TweenService:Create(InputStroke, TweenInfo.new(0.3), {Color = Color3.fromRGB(50, 50, 70), Thickness = 2}):Play()
+    TweenService:Create(PassInput, TweenInfo.new(0.3), {Size = UDim2.new(0.6, 0, 0, 55), BackgroundColor3 = Color3.fromRGB(20, 20, 25)}):Play()
+end)
+
+-- Botão Entrar
 local ConfirmBtn = Instance.new("TextButton", PassFrame)
-ConfirmBtn.Size = UDim2.new(0.8, 0, 0, 40)
-ConfirmBtn.Position = UDim2.new(0.1, 0, 0.75, 0)
-ConfirmBtn.BackgroundColor3 = Color3.fromRGB(0, 140, 255)
-ConfirmBtn.Text = "ENTRAR"
+ConfirmBtn.Size = UDim2.new(0.6, 0, 0, 50)
+ConfirmBtn.Position = UDim2.new(0.5, 0, 0.80, 0)
+ConfirmBtn.AnchorPoint = Vector2.new(0.5, 0.5)
+ConfirmBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 220)
+ConfirmBtn.Text = "ACESSAR HUB"
 ConfirmBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 ConfirmBtn.Font = Enum.Font.GothamBlack
-ConfirmBtn.TextSize = 16
+ConfirmBtn.TextSize = 18
 ConfirmBtn.AutoButtonColor = true
 
 local BtnCorner = Instance.new("UICorner", ConfirmBtn)
-BtnCorner.CornerRadius = UDim.new(0, 8)
+BtnCorner.CornerRadius = UDim.new(0, 10)
 
+-- Texto de Status
 local StatusTxt = Instance.new("TextLabel", PassFrame)
 StatusTxt.Size = UDim2.new(1, 0, 0, 20)
-StatusTxt.Position = UDim2.new(0, 0, 0.58, 0)
+StatusTxt.Position = UDim2.new(0, 0, 0.92, 0)
 StatusTxt.BackgroundTransparency = 1
 StatusTxt.Text = ""
 StatusTxt.Font = Enum.Font.GothamMedium
-StatusTxt.TextSize = 12
+StatusTxt.TextSize = 14
 StatusTxt.TextColor3 = Color3.fromRGB(255, 50, 50)
 
 -- Função de verificar senha
 local function CheckPass()
     if PassInput.Text == "imperador" then
         StatusTxt.TextColor3 = Color3.fromRGB(0, 255, 100)
-        StatusTxt.Text = "SENHA CORRETA. BEM-VINDO, REI."
-        ConfirmBtn.Text = "CARREGANDO..."
-        task.wait(1)
+        StatusTxt.Text = "SENHA ACEITA"
+        ConfirmBtn.Text = "INICIANDO..."
         
-        -- Animação de saída
-        TweenService:Create(PassFrame, TweenInfo.new(0.5), {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}):Play()
+        -- Efeito visual de sucesso
+        TweenService:Create(PassStroke, TweenInfo.new(0.5), {Color = Color3.fromRGB(0, 255, 100)}):Play()
+        task.wait(0.8)
+        
+        -- Animação de saída (Encolher e sumir)
+        TweenService:Create(PassFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Size = UDim2.new(0,0,0,0)}):Play()
         TweenService:Create(Blur, TweenInfo.new(0.5), {Size = 0}):Play()
         task.wait(0.5)
         PassScreen:Destroy()
         Blur:Destroy()
         
-        -- CHAMA A FUNÇÃO PRINCIPAL (O SCRIPT DO HUB)
+        -- CHAMA A FUNÇÃO PRINCIPAL
         LoadMainScriptHub()
     else
         StatusTxt.TextColor3 = Color3.fromRGB(255, 50, 50)
-        StatusTxt.Text = "SENHA INCORRETA!"
+        StatusTxt.Text = "SENHA ERRADA!"
         PassInput.Text = ""
         
-        -- Efeito de tremer (Erro)
-        for i = 1, 5 do
-            PassFrame.Position = UDim2.new(0.5, math.random(-5, 5), 0.5, 0)
-            task.wait(0.05)
+        -- Efeito de tremer (Erro) e borda vermelha
+        local originalColor = PassStroke.Color
+        PassStroke.Color = Color3.fromRGB(255, 0, 0)
+        
+        for i = 1, 6 do
+            PassFrame.Position = UDim2.new(0.5, math.random(-8, 8), 0.5, 0)
+            task.wait(0.04)
         end
         PassFrame.Position = UDim2.fromScale(0.5, 0.5)
+        TweenService:Create(PassStroke, TweenInfo.new(0.5), {Color = originalColor}):Play()
     end
 end
 
@@ -203,9 +259,7 @@ PassInput.FocusLost:Connect(function(enter)
 end)
 
 
---// 3. SCRIPT PRINCIPAL (ENCAPSULADO EM UMA FUNÇÃO) //--
--- Só roda se a senha estiver correta
-
+--// 3. SCRIPT PRINCIPAL (ENCAPSULADO - SEM ALTERAÇÕES) //--
 function LoadMainScriptHub()
     
     local TeleportService = game:GetService("TeleportService")
